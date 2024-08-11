@@ -1,68 +1,49 @@
 #include <algorithm>
 #include <iostream>
 using namespace std;
+
 int N, M, K;
-pair<int, int> sum[2005][2005]; // 짝수 pair수, first가 짝수 검정
+pair<int, int> sum[2005][2005];
+
 int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
   cin >> N >> M >> K;
   for (int i = 1; i <= N; i++) {
-    sum[0][i] = {0, 0};
     sum[i][0] = {0, 0};
-    int oddB = 0;
-    int evenB = 0;
+    string str;
+    cin >> str;
     for (int j = 1; j <= M; j++) {
-      char c;
-      cin >> c;
-      if (c == 'B') {
-        if (j % 2 == 0) {
-          evenB++;
-        } else {
-          oddB++;
-        }
+      sum[i][j] = sum[i][j - 1];
+      if (str[j - 1] == 'B') {
+        if (j % 2 == 0)
+          sum[i][j].first++;
+        else
+          sum[i][j].second++;
       }
-      sum[i][j] = {evenB, oddB};
     }
   }
   int ans = 0x7fffffff;
   for (int i = 1; i <= N - K + 1; i++) {
     for (int j = 1; j <= M - K + 1; j++) {
-      int tmp = 0;
-      // i가 짝수, 행도 짝수일 때 때 이렇게 계산하면 되긴 함
+      int tmp1 = 0, tmp2 = 0;
       for (int a = 0; a < K; a++) {
+        int evenB = sum[i + a][j + K - 1].first - sum[i + a][j - 1].first;
+        int oddB = sum[i + a][j + K - 1].second - sum[i + a][j - 1].second;
         if (a % 2 == 0) {
-          tmp += (K + 1) / 2 -
-                 (sum[i + a][j + K - 1].first - sum[i + a][j - 1].first);
-          tmp += sum[i + a][j + K - 1].second - sum[i + a][j - 1].second;
+          tmp1 += (K + 1) / 2 - evenB + oddB;
+          tmp2 += (K + 1) / 2 - oddB + evenB;
         } else {
-          tmp += sum[i + a][j + K - 1].first - sum[i + a][j - 1].first;
-          tmp +=
-              K / 2 - sum[i + a][j + K - 1].second + sum[i + a][j - 1].second;
+          tmp1 += evenB + K / 2 - oddB;
+          tmp2 += oddB + K / 2 - evenB;
         }
       }
-      if (tmp < 0)
-        tmp = ans;
-      ans = min(ans, tmp);
-      tmp = 0;
-      for (int a = 0; a < j + K; a++) {
-        if (a % 2 == 0) {
-          tmp += (K + 1) / 2 -
-                 (sum[i + a][j + K - 1].second - sum[i + a][j - 1].second);
-          tmp += sum[i + a][j + K - 1].first - sum[i + a][j - 1].first;
-        } else {
-          tmp += sum[i + a][j + K - 1].second - sum[i + a][j - 1].second;
-          tmp += K / 2 - sum[i + a][j + K - 1].first + sum[i + a][j - 1].first;
-        }
-      }
-      if (tmp < 0)
-        tmp = ans;
-      ans = min(ans, tmp);
+      ans = min({ans, tmp1, tmp2});
     }
   }
+
   cout << ans;
 }
-
 // 제자리를 결정 하려면 어떻게 해야하지? 변수를 2개만들까? 홀수검은색 개수랑
 // 짝수 검은색 개수를 셀까 제자리에 있는 애가 몇 개인지를 카운팅해야함.
 // 그리고 검은색 시작이 제자리인 경우랑, 흰색 시작이 제자리인 경우 두 가지를
