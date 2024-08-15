@@ -10,7 +10,7 @@ int validSubarraySize(vector<int> &nums, int threshold) {
   stack<pair<long long, long long>> s; // value, index
   long long i = 0;
   while (i < N) {
-    if (s.empty() || s.top().first < nums[i]) {
+    if (s.empty() || s.top().first < nums[i]) { // 증가중이면 ㄱㅊ
       s.push({nums[i], i});
       i++;
     } else {
