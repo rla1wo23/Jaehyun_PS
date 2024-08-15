@@ -6,6 +6,7 @@ using namespace std;
 
 int validSubarraySize(vector<int> &nums, int threshold) {
   long long N = nums.size();
+  // 이 스택에 있다는 것은,지금까지 나온 애들중에 내가 제일 작다는 거임
   stack<pair<long long, long long>> s; // value, index
   long long i = 0;
   while (i < N) {
