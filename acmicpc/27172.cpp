@@ -5,15 +5,15 @@ vector<int> v;
 vector<int> score;
 int arr[1000005] = {0};
 
-void use_f(int idx) {
+void factoring(int idx) {
   int num = v[idx];
   for (int i = 2; i * i <= num; i++) {
-    if (num % i == 0 && arr[i] > 0) {
-      score[idx]--; // 반대 수도 더해줘야지
+    if (num % i == 0 && arr[i] > 0) { // 나눠 떨어지고, i 카드가 존재한다면
+      score[idx]--;
       score[arr[i]]++;
-    }
-    if (i * i == num) { // 완전제곱수면 조건을 한 번만 검사해야 함.
-      continue;
+      if (i * i == num) {
+        continue;
+      }
     }
     if (num % i == 0 && arr[num / i] > 0) {
       score[idx]--;
@@ -34,7 +34,7 @@ int main() {
     arr[v[i]] = i;
   }
   for (int i = 1; i <= N; i++) {
-    use_f(i);
+    factoring(i);
   }
   for (int i = 1; i <= N; i++) {
     cout << score[i] << " ";
