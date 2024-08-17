@@ -3,43 +3,62 @@
 #include <vector>
 using namespace std;
 
-int people[51] = {0};
-// 이사람을 다시 만날 일이 없으면,과장해도 된다.
-// 진실을 아는 사람 없다고 바로 말해도 되는가? =>아님. 이사람이 진실자랑 나중에
-// 진실을 아는 자랑 언젠가 파티에 같이 참석할 것인지 아닌지
-// 여부가 중요하다. 진실을 무조건 말해야 되는 경우에는 당연히 진실자가 된다.
-// 과장 과장 가능
+int people[51] = {0}; // 1이면 진실을 아는 사람
 int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
   int N, M;
   cin >> N >> M;
-  int tp;
+  int tp; // 최초 진실러
   cin >> tp;
   while (tp--) {
     int i;
     cin >> i;
-    people[i] = -1;
+    people[i] = 1;
   }
+  vector<vector<int>> v(M); // 파티 정보
   int cnt = 0;
-  vector<vector<int>> lpt(M);   // 거짓파티
-  for (int i = 0; i < M; i++) { // M개의 파티
-    int pp;                     // 파티 참여인
-    cin >> pp;
-    bool truth = false;
-    vector<int> v;
-    for (int i = 0; i < pp; i++) {
-      int idx;
-      cin >> idx;
-      v.push_back(idx);
-      if (people[idx] == -1) {
-        truth = true;
-        cnt++;
+  bool party_num[51] = {false};
+  for (int i = 0; i < M; i++) {
+    int num;
+    cin >> num;
+    bool true_party = false;
+    for (int j = 0; j < num; j++) {
+      int k;
+      cin >> k;
+      v[i].push_back(k);
+      if (people[k] == 1) {
+        true_party = true;
       }
     }
-    if (truth = true) {
-      for (int i = 0; i < pp; i++) {
-        people[v[i]] = -1;
+    if (true_party) {
+      cnt++;
+      party_num[i] = true;
+      for (int j = 0; j < num; j++) {
+        people[v[i][j]] = 1;
       }
-    } else {
     }
   }
+  int b_cnt = 0;
+  while (b_cnt != cnt) {
+    b_cnt = cnt;
+    for (int i = 0; i < M; i++) {
+      if (party_num[i])
+        continue;
+      bool true_party = false;
+      for (int j = 0; j < v[i].size(); j++) {
+        if (people[v[i][j]] == 1) {
+          true_party = true;
+          party_num[i] = true;
+        }
+      }
+      if (true_party) {
+        cnt++;
+        for (int j = 0; j < v[i].size(); j++) {
+          people[v[i][j]] = 1;
+        }
+      }
+    }
+  }
+  cout << M - cnt;
 }
