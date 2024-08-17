@@ -7,13 +7,13 @@ int arr[1000005] = {0};
 
 void factoring(int idx) {
   int num = v[idx];
-  for (int i = 2; i * i <= num; i++) {
+  for (int i = 1; i * i <= num; i++) {
     if (num % i == 0 && arr[i] > 0) { // 나눠 떨어지고, i 카드가 존재한다면
       score[idx]--;
       score[arr[i]]++;
-      if (i * i == num) {
-        continue;
-      }
+    }
+    if (i * i == num) {
+      continue;
     }
     if (num % i == 0 && arr[num / i] > 0) {
       score[idx]--;
