@@ -9,13 +9,6 @@ int find(int k) {
     return un[k] = find(un[k]);
   }
 }
-int find(int k) {
-  if (un[k] == k) { // 내가 내 조상이면
-    return k;
-  } else {
-    return un[k] = find(un[k]);
-  }
-}
 void uni(int a, int b) {
   int rootA = find(a);
   int rootB = find(b);
