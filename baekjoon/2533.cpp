@@ -8,7 +8,7 @@ using namespace std;
 vector<vector<int>> adj; // 자기 부모만 제외하고 순회 가능
 bool colored[1000001] = {false};
 int ans = 0;
-bool dfs(int cur, int par) { // 해당 노드가 리프라면 색칠한다.
+bool dfs(int cur, int par) {
   for (int i = 0; i < adj[cur].size(); i++) {
     int nxt = adj[cur][i];
     if (nxt == par) { // 부모는 방문하지 않는다.
@@ -17,8 +17,7 @@ bool dfs(int cur, int par) { // 해당 노드가 리프라면 색칠한다.
       if (dfs(nxt, cur) == true) {
         adj[cur].erase(adj[cur].begin() + i);
         if (colored[nxt] == false) {
-          if (colored[cur] !=
-              true) { // 색칠되지 않은 노드의 부모라면, 반드시 칠해야 한다.
+          if (colored[cur] != true) { //색칠되지 않은 노드의 부모라면, 반드시 칠해야 한다.
             ans++;
           }
           colored[cur] = true;
@@ -27,7 +26,7 @@ bool dfs(int cur, int par) { // 해당 노드가 리프라면 색칠한다.
       }
     }
   }
-  return adj[cur].size() == 1; // size가 1이라면 true를
+  return adj[cur].size() == 1; // size가 1이라면 true를 리턴한다.
 }
 int main() {
   ios::sync_with_stdio(0);
