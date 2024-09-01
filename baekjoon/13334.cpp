@@ -7,7 +7,7 @@ bool compare(pair<int, int> a, pair<int, int> b) { return a.second < b.second; }
 int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
-  int N;
+  int N, d;
   cin >> N;
   vector<pair<int, int>> v;
   for (int i = 0; i < N; i++) {
@@ -19,7 +19,6 @@ int main() {
     v.push_back({a, b});
   }
   sort(v.begin(), v.end(), compare);
-  int d;
   cin >> d;
   priority_queue<pair<int, int>, vector<pair<int, int>>,
                  greater<pair<int, int>>>
