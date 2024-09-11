@@ -7,7 +7,7 @@ using namespace std;
 vector<vector<int>> adj;
 int n, m;
 
-int bfs(int start) {
+int bfs(int start,) {
   vector<int> dist(n, -1); // 각 노드의 거리를 저장
   queue<pair<int, int>> q; // {노드, 부모 노드}
 
@@ -26,6 +26,7 @@ int bfs(int start) {
       if (dist[nxt] == -1) { // 처음 방문하는 노드
         dist[nxt] = dist[cur] + 1;
         q.push({nxt, cur});
+        visited[nxt] = true;
       } else { // 이미 방문한 노드이면 사이클 발견
         min_cycle = min(min_cycle, dist[cur] + dist[nxt] + 1);
       }
@@ -40,6 +41,7 @@ int main() {
   cin.tie(0);
   int T;
   cin >> T;
+
   for (int tc = 1; tc <= T; tc++) {
     cin >> n >> m;
     adj.clear();
@@ -51,10 +53,12 @@ int main() {
       adj[u].push_back(v);
       adj[v].push_back(u);
     }
+
     int ans = 505;
     vector<bool> visited(n, false);
     for (int node = 0; node < n; node++) {
       if (!visited[node]) {
+        visited[node] = true;
         ans = min(ans, bfs(node));
       }
     }
