@@ -5,41 +5,42 @@
 using namespace std;
 
 int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
   int tc;
   cin >> tc;
   while (tc--) {
     int n;
     cin >> n;
-    vector<int> v(n + 1);
-    vector<vector<int>> adj(n + 1);
-    int degree[501] = {0};
-    int arr[501] = {0}; // 원래 team과 등수(index가 팀, i가 등수)
-    bool changed[501][501] = {false};
+    bool changed[505][505];
     for (int i = 1; i <= n; i++) {
-      cin >> v[i];
-      arr[v[i]] = i;
-    }
-    int m;
-    cin >> m;
-    while (m--) {
-      int a, b;
-      cin >> a >> b;
-      changed[a][b] = true;
-      changed[b][a] = true;
-      if (arr[a] < arr[b]) { // 원래 a가 등수가 더 높았다면
-        adj[b].push_back(a);
-        degree[a]++;
-      } else {
-        adj[a].push_back(b);
-        degree[b]++;
+      for (int j = 1; j <= n; j++) {
+        changed[i][j] = false;
       }
     }
+    vector<int> rank(n + 1);
+    for (int i = 1; i <= n; i++) {
+      cin >> rank[i];
+    }
+    vector<pair<int, int>> changed_list;
+    int m;
+    cin >> m;
+    for (int i = 0; i < m; i++) {
+      int u, v;
+      cin >> u >> v;
+      changed[u][v] = true; // u가 더 높은거다
+    }
+    vector<vector<int>> adj(n + 1);
+    vector<int> degree(n + 1);
     for (int i = 1; i <= n - 1; i++) {
       for (int j = i + 1; j <= n; j++) {
-        if (!changed[v[i]][v[j]]) {
-          adj[i].push_back(j);
-          degree[j]++;
+        int u = rank[i];
+        int v = rank[j];
+        if (changed[u][v] || changed[v][u]) {
+          swap(u, v);
         }
+        degree[v]++;
+        adj[u].push_back(v);
       }
     }
     queue<int> q;
@@ -48,31 +49,34 @@ int main() {
         q.push(i);
       }
     }
-    queue<int> ans;
+    queue<int> ans_queue;
+    int ans_cnt = 0;
+    bool err_flag = false;
     while (!q.empty()) {
       if (q.size() > 1) {
-        break;
+        err_flag = true;
       }
       int cur = q.front();
       q.pop();
-      ans.push(cur);
-      for (int nxt : adj[cur]) {
+      ans_cnt++;
+      ans_queue.push(cur);
+      for (int i = 0; i < adj[cur].size(); i++) {
+        int nxt = adj[cur][i];
         degree[nxt]--;
-        if (degree[nxt] == 0) {
+        if (degree[nxt] == 0)
           q.push(nxt);
-        }
       }
     }
-    if (!q.empty()) {
+    if (ans_cnt != n) {
+      cout << "IMPOSSIBLE\n";
+    } else if (err_flag) {
       cout << "?\n";
-    } else if (ans.size() == n) {
-      while (!ans.empty()) {
-        cout << ans.front() << " ";
-        ans.pop();
+    } else {
+      while (!ans_queue.empty()) {
+        cout << ans_queue.front() << " ";
+        ans_queue.pop();
       }
       cout << "\n";
-    } else {
-      cout << "IMPOSSIBLE\n";
     }
   }
 }
