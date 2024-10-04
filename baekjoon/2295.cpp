@@ -1,29 +1,33 @@
 #include <algorithm>
 #include <iostream>
-#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 using namespace std;
-vector<int> sums;
-unordered_map<int, int> save_space;
+
 int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
   int N;
   cin >> N;
-  vector<long long> v(N);
-  vector<int> cand_vector;
-  unordered_map<int, int> cand;
+  vector<int> v(N);
   for (int i = 0; i < N; i++) {
     cin >> v[i];
-    cand[v[i]] = 1;
-    cand_vector.push_back(v[i]);
   }
   sort(v.begin(), v.end());
-  // Step1:두개의 합을 다 저장하는 단계
+  unordered_set<int> sum_set;
   for (int i = 0; i < N; i++) {
-    for (int j = 0; j < N; j++) {
-      sums.push_back(v[i] + v[j]);
+    for (int j = i; j < N; j++) {
+      sum_set.insert(v[i] + v[j]);
     }
   }
-  // Step2:두개의 합의 반대를 저장
+  int ans = 0;
+  for (int k = N - 1; k >= 0; k--) {
+    for (int i = 0; i < N; i++) {
+      int diff = v[k] - v[i];
+      if (sum_set.count(diff)) {
+        ans = max(ans, v[k]);
+      }
+    }
+  }
+  cout << ans;
 }
