@@ -7,7 +7,7 @@ bool can_build(int dist) {
   int cnt = 1;
   int prev = house[0];
   for (int i = 1; i < N; i++) {
-    if (dist <= house[i] - prev) {
+    if (dist >= house[i] - prev) {
       cnt++;
       prev = house[i];
     }
@@ -21,9 +21,9 @@ int main() {
   for (int i = 0; i < N; i++)
     cin >> house[i];
   sort(house, house + N);
-  int st = 1;
+  int st = house[0];
   int en = house[N - 1] - house[0];
-  int ans = 0;
+  int ans = 1;
   while (st <= en) {
     int dist = (st + en) / 2;
     if (can_build(dist)) {
