@@ -23,7 +23,5 @@ int main() {
     }
   }
   for (int i = 0; i <= 10000; i++) { // 비용 i
-    for (int idx = 0; i < N; i++) {  // 비용이 i인 idx있는지 검사
-    }
   }
 }
